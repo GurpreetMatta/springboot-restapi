@@ -1,0 +1,7 @@
+<div class="footer text-center" th:fragment="breadcrumb">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-white">
+            <li th:each="bc : ${breadcrumbs}" class="breadcrumb-item"><span th:text="${bc}"></span></li>
+        </ol>
+    </nav>
+</div>

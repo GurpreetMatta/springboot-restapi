@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/header"/>
+<body class="container">
+<!-- Top  Menu -->
+<header th:replace="fragments/top-menu"/>
+<!--    breadcrumb    -->
+<header th:replace="fragments/breadcrumb"/>
+
+<!--Basic Info-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#basicinfo" aria-expanded="true"
+            aria-controls="basicinfo">
+        Basic Info
+    </button>
+    <hr>
+    <div class="collapse" id="basicinfo">
+        <div class="card card-body bg-secondary basic-info">
+            <div class="row">
+                <div class="col">
+                <span class="float-left">
+                    Product Id: <span th:text="${productId}"></span>
+                </span>
+                </div>
+                <div class="col">
+                <span class="float-right">
+                    Revised On: <span th:text="${revisedOn}"></span>
+                </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                <span class="float-left">
+                    Revision: <span th:text="${revision}"></span>
+                </span>
+                </div>
+                <div class="col">
+                <span class="float-right">
+                    Revised By: <span th:text="${revisedBy}"></span>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<!--Overview-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#overview" aria-expanded="false"
+            aria-controls="overview">
+        Overview
+    </button>
+    <hr>
+    <div class="collapse" id="overview">
+        <div class="card card-body bg-light overview">
+            <form th:object="${overview}"
+                  th:action="${'/overview/create'}"
+                  th:method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <img id="output" th:src="*{imgages}" style="width:250px;height:250px"/>
+                            <input type="file" name="collage" multiple="multiple" accept="image/*"
+                                   onchange="loadFile(event)">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input id="name" class="form-control" type="text" placeholder="Name"
+                                           th:field="*{name}">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="productNumber">Product Number</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Prefix</span>
+                                        </div>
+                                        <input id="productNumber" class="form-control" type="text"
+                                               placeholder="Product Number" th:field="*{productNumber}">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Postfix</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="brand">Brand</label>
+                                    <select id="brand" class="form-control" th:field="*{brand}">
+                                        <option selected value="">Choose...</option>
+                                        <option th:each="brand : ${brands}"
+                                                th:value="${brand}"
+                                                th:text="${brand}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="productCategory">Product Category</label>
+                                    <div class="input-group">
+                                        <input id="productCategory" class="form-control" type="text"
+                                               placeholder="Product Category" th:field="*{productCategory}">
+                                        <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="productType">Product Type</label>
+                                    <select id="productType" class="form-control" th:field="*{productType}">
+                                        <option selected value="">Choose...</option>
+                                        <option th:each="product : ${products}"
+                                                th:value="${product}"
+                                                th:text="${product}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="configurationType">Configuration Type</label>
+                                    <input id="configurationType" class="form-control" type="text"
+                                           placeholder="Configuration Type" th:field="*{configurationType}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="shortDescription">Short Description</label>
+                                    <input id="shortDescription" class="form-control" type="text"
+                                           placeholder="Short Description" th:field="*{shortDescription}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="longDescription">Long Description</label>
+                            <textarea id="longDescription" class="form-control" type="text"
+                                      placeholder="Long Description" th:field="*{longDescription}"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="topic">Topic</label>
+                            <input id="topic" class="form-control" type="text" placeholder="Topic" th:field="*{topic}">
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:field="*{id}">
+                <div class="row d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+
+<!--Key Feature-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#keyFeature" aria-expanded="false"
+            aria-controls="keyFeature">
+        Key Feature
+    </button>
+    <hr>
+    <div class="collapse" id="keyFeature">
+        <div class="card card-body bg-light overview">
+            <div class="row bg-white">
+                <table class="table">
+                    <thead>
+                    <th>ID</th>
+                    <th>Name</th>
+                    </thead>
+                    <tbody>
+                    <tr th:each="keyFeature :${keyFeatures}">
+                        <td>
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option selected value="">Choose...</option>
+                                    <option th:each="feature : ${featureIds}"
+                                            th:value="${feature}"
+                                            th:text="${feature}"
+                                            th:selected="${keyFeature.id} == ${feature} ? true : false">
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <form class="form-inline"
+                                  th:object="${keyFeature}"
+                                  th:action="${'/keyfeature/create/' + keyFeature.id }"
+                                  th:method="post">
+                                <input class="form-control" type="text" th:field="*{name}"
+                                       placeholder="name" style="width:80%">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="float-right"><i class="fa fa-bars" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="row">
+                                &nbsp;&nbsp;
+                                <form th:action="${'/keyfeature/delete/' + keyFeature.id }"
+                                      th:method="delete">
+                                    <button type="submit"><i class="fa fa-window-close" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <td></td>
+                    <td></td>
+                    <td>
+                   <span class="float-right">
+                        <a th:href="@{/keyfeature/add}">Add Feature</a>
+                   </span>
+                    </td>
+                    </tfoot>
+                </table>
+
+            </div>
+            <br>
+            <div class="row d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary">Cancel</button>&nbsp;
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<!--Application-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#application"
+            aria-expanded="false" aria-controls="application">
+        Application
+    </button>
+    <hr>
+    <div class="collapse" id="application">
+        <div class="card card-body">
+            Application
+        </div>
+    </div>
+</div>
+<br>
+<!--Related Accessories-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#relatedAccessories"
+            aria-expanded="false" aria-controls="relatedAccessories">
+        Related Accessories
+    </button>
+    <hr>
+    <div class="collapse" id="relatedAccessories">
+        <div class="card card-body">
+            Related Accessories
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- Related Service Part-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#relatedServiceParts"
+            aria-expanded="false"
+            aria-controls="relatedServiceParts">
+        Related Service Part
+    </button>
+    <hr>
+    <div class="collapse" id="relatedServiceParts">
+        <div class="card card-body">
+            Related Service Part
+        </div>
+    </div>
+</div>
+<br>
+<!-- Feature Options-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#featureOptions"
+            aria-expanded="false"
+            aria-controls="featureOptions">
+        Feature Options
+    </button>
+    <hr>
+    <div class="collapse" id="featureOptions">
+        <div class="card card-body bg-light overview">
+            <div>
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Feature</label>
+                            </div>
+                            <div class="col">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="singleOption"
+                                           value="singleOption">
+                                    <label class="form-check-label" for="singleOption">Single Option</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                           id="multiOption"
+                                           value="multiOption">
+                                    <label class="form-check-label" for="multiOption">Multi Option</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bg-white">
+                            <table class="table">
+                                <thead>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th></th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="form-control">
+                                                <option selected value="">Choose...</option>
+                                                <option th:each="feature : ${featureIds}"
+                                                        th:value="${feature}"
+                                                        th:text="${feature}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text"
+                                               placeholder="name">
+                                    </td>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input position-static" type="checkbox"
+                                                   id="blankCheckbox" value="option1">Required
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            Options
+                        </div>
+                        <div class="row bg-white">
+                            <table class="table">
+                                <thead>
+                                <th>ID</th>
+                                <th>Product Number</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr th:each="product : ${productsList}">
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="form-control">
+                                                <option selected value="">Choose...</option>
+                                                <option th:each="feature : ${productIds}"
+                                                        th:value="${feature}"
+                                                        th:text="${feature}"
+                                                        th:selected="${product.id} == ${feature} ? true : false"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <form class="form-inline"
+                                              th:object="${product}"
+                                              th:action="${'/products/create/' + product.id }"
+                                              th:method="post">
+                                            <div class="input-group">
+                                                <input class="form-control" type="text"
+                                                       placeholder="Product Number" style="width:40%"
+                                                       th:field="*{productNumber}">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;
+                                            <input class="form-control" type="text"
+                                                   placeholder="Description" style="width:40%"
+                                                   th:field="*{description}">
+                                            &nbsp;&nbsp;
+                                            <button>
+                                                <i class="fa fa-bars" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <form th:action="${'/products/delete/' + product.id }"
+                                              th:method="delete">
+                                            <button type="submit"><i class="fa fa-window-close"
+                                                                     aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                   <span class="float-right">
+                                        <a th:href="@{/products/add}">Add Feature</a>
+                                   </span>
+                                </td>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- Rules-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#rules"
+            aria-expanded="false"
+            aria-controls="rules">
+        Rules
+    </button>
+    <hr>
+    <div class="collapse" id="rules">
+        <div class="card card-body">
+            Following rules defines the combinations of features that are not allowed when configuring the product
+            <br>
+            <div th:each="rule ,iterator:${rules}">
+                <div class="row">
+                    <div class="col-3">
+                        <h3>Rule <span th:text="${iterator.index}"></span></h3>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <select class="form-control">
+                                        <option selected value="">Choose...</option>
+                                        <option th:each="feature : ${productIds}"
+                                                th:value="${feature}"
+                                                th:text="${feature}"
+                                                th:selected="${product.id} == ${feature} ? true : false"
+                                        >
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <select class="form-control">
+                                        <option selected value="">Choose...</option>
+                                        <option th:each="feature : ${productIds}"
+                                                th:value="${feature}"
+                                                th:text="${feature}"
+                                                th:selected="${product.id} == ${feature} ? true : false"
+                                        >
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <form th:action="${'/rules/delete/' + rule.id }"
+                                      th:method="delete">
+                                    <button type="submit"><i class="fa fa-window-close"
+                                                             aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="float-right">
+                    <a th:href="@{/rules/add}"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            </span>
+        </div>
+    </div>
+</div>
+<br>
+<!-- ProductEN Lifecyle-->
+<div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#productLifecyle"
+            aria-expanded="false"
+            aria-controls="productLifecyle">
+        Product Lifecyle
+    </button>
+    <hr>
+    <div class="collapse" id="productLifecyle">
+        <div class="card card-body">
+            Product Lifecyle
+        </div>
+    </div>
+</div>
+<br>
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+
+
+
+
+</script>
+<!-- Bootom -->
+<header th:replace="fragments/footer"/>
+</body>
+</html>
